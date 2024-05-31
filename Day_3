@@ -1,0 +1,79 @@
+DROP TABLE IF EXISTS employees;
+
+CREATE TABLE employees (
+    EmployeeID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Department VARCHAR(50),
+    Salary NUMERIC(10, 2)
+);
+
+-- Insert sample records into Employee table
+INSERT INTO employees (EmployeeID, FirstName, LastName, Department, Salary) VALUES
+(1, 'John', 'Doe', 'Finance', 75000.00),
+(2, 'Jane', 'Smith', 'HR', 60000.00),
+(3, 'Michael', 'Johnson', 'IT', 45000.00),
+(4, 'Emily', 'Brown', 'Marketing', 55000.00),
+(5, 'David', 'Williams', 'Finance', 80000.00),
+(6, 'Sarah', 'Jones', 'HR', 48000.00),
+(7, 'Chris', 'Taylor', 'IT', 72000.00),
+(8, 'Jessica', 'Wilson', 'Marketing', 49000.00);
+
+select * from employees;
+
+select *,CASE 
+			WHEN salary > 70000 then "HIGH"
+            WHEN salary >=50000 and salary<=70000 THEN "MEDIUM"
+            ELSE "Low"
+		END as salary_category
+FROM employees
+------------------------------------------------------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS customers;
+CREATE TABLE Customers (
+    CustomerID INT,
+    CustomerName VARCHAR(50)
+);
+
+-- Create Purchases table
+DROP TABLE IF EXISTS purchases;
+CREATE TABLE Purchases (
+    PurchaseID INT,
+    CustomerID INT,
+    ProductName VARCHAR(50),
+    PurchaseDate DATE
+);
+
+-- Insert sample data into Customers table
+INSERT INTO Customers (CustomerID, CustomerName) VALUES
+(1, 'John'),
+(2, 'Emma'),
+(3, 'Michael'),
+(4, 'Ben'),
+(5, 'John')	;
+
+-- Insert sample data into Purchases table
+INSERT INTO Purchases (PurchaseID, CustomerID, ProductName, PurchaseDate) VALUES
+(100, 1, 'iPhone', '2024-01-01'),
+(101, 1, 'MacBook', '2024-01-20'),	
+(102, 1, 'Airpods', '2024-03-10'),
+(103, 2, 'iPad', '2024-03-05'),
+(104, 2, 'iPhone', '2024-03-15'),
+(105, 3, 'MacBook', '2024-03-20'),
+(106, 3, 'Airpods', '2024-03-25'),
+(107, 4, 'iPhone', '2024-03-22'),	
+(108, 4, 'Airpods', '2024-03-29'),
+(110, 5, 'Airpods', '2024-02-29'),
+(109, 5, 'iPhone', '2024-03-22');
+
+
+select * from Purchases;
+select * from customers;
+
+with cte1 as(select * from purchases where productname='iphone')
+
+, cte2 as(select * from purchases where productname='airpods')
+
+, cte3 as(select cte1.customerid from cte1 join cte2 on cte1.customerid=cte2.customerid where cte1.purchasedate<cte2.purchasedate)
+
+select a.customerid, customername from cte3 a join customers b on a.customerid=b.customerid;
